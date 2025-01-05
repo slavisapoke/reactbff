@@ -1,0 +1,8 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/ReactBFF/obj
+/ReactBFF/bin
+/ReactBFF/.vs/ReactBFF
+/.vs/ReactBFF
