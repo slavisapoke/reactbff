@@ -28,7 +28,7 @@ public class PizzasController : ControllerBase
             },
             new Pizza
             {
-                Id = 1,
+                Id = 2,
                 Name = "Pizza Margherita",
                 Ingredients = "Tomato and mozarella",
                 PhotoName = "pizzas/margherita.jpg",
