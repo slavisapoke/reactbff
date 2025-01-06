@@ -34,4 +34,32 @@ public class PaymentController : ControllerBase
         var paymentIntent = await service.CreateAsync(options);
         return Ok(new { clientSecret = paymentIntent.ClientSecret });
     }
+
+    [HttpPost("webhook")]
+    public async Task<IActionResult> PaymentWebhook()
+    {
+        var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
+        string endpointSecret = _configuration["StripeWebhookSecret"]!;
+        try
+        {
+            var stripeEvent = EventUtility.ParseEvent(json);
+            var signatureHeader = Request.Headers["Stripe-Signature"];
+
+            stripeEvent = EventUtility.ConstructEvent(json,
+                    signatureHeader, endpointSecret);
+            //TODO handle by type...
+            _logger.LogInformation($"Logged event: {json}");
+            return Ok();
+        }
+        catch (StripeException e)
+        {
+            _logger.LogError(e, "Failed to handle stripe event: " + e.Message);
+            return BadRequest();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "General error handling stripe event: " + e.Message);
+            return StatusCode(500);
+        }
+    }
 }
