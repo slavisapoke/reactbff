@@ -1,6 +1,16 @@
+using Microsoft.Extensions.Logging.AzureAppServices;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Logging.AddAzureWebAppDiagnostics();
+
+builder.Services.Configure<AzureFileLoggerOptions>(options =>
+{
+    options.FileName = "logs-";
+    options.FileSizeLimit = 50 * 1024;
+    options.RetainedFileCountLimit = 5;
+});
 
 // Add services to the container.
 builder.Services.AddCors(options =>
