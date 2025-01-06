@@ -36,6 +36,8 @@ public class PizzasController : ControllerBase
                 SoldOut = false
             }];
 
+        _logger.LogInformation("Returning pizzasss: " + result.Count);
+
         return result;
     }
 }

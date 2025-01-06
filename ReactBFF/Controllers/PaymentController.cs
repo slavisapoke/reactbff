@@ -24,6 +24,7 @@ public class PaymentController : ControllerBase
     [HttpPost("create-intent")]
     public async Task<IActionResult> CreatePaymentIntent([FromBody] CreatePaymentIntentRequest request)
     {
+        _logger.LogInformation(request.ToString());
         var options = new PaymentIntentCreateOptions
         {
             Amount = 500,
