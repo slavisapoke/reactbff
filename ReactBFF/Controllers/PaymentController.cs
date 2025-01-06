@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using ReactBFF.Model;
 using Stripe;
 
 namespace ReactBFF.Controllers;
@@ -21,12 +22,12 @@ public class PaymentController : ControllerBase
     }
 
     [HttpPost("create-intent")]
-    public async Task<IActionResult> CreatePaymentIntent()
+    public async Task<IActionResult> CreatePaymentIntent([FromBody] CreatePaymentIntentRequest request)
     {
         var options = new PaymentIntentCreateOptions
         {
             Amount = 500,
-            Currency = "USD"
+            Currency = request.Currency
         };
 
         var service = new PaymentIntentService(_stripeClient);
