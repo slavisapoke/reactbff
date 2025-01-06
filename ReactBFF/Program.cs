@@ -1,5 +1,7 @@
 using Microsoft.Extensions.Logging.AzureAppServices;
 using Serilog;
+using Initialization;
+using Model;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +36,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.Configure<CosmosDBSettings>(
+    builder.Configuration.GetSection(CosmosDBSettings.SETTINGS_NAME));
+
+builder.Services.ConfigureServices();
 
 var app = builder.Build();
  

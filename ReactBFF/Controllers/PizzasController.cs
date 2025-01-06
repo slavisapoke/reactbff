@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Model;
+using Ports;
 
 namespace ReactBFF.Controllers;
 
@@ -14,27 +16,9 @@ public class PizzasController : ControllerBase
     }
 
     [HttpGet]
-    public IEnumerable<Pizza> Get()
+    public async Task<IEnumerable<Food>> Get([FromServices] IFoodRepository foodRepo)
     {
-        List<Pizza> result = [
-            new Pizza
-            {
-                Id = 1,
-                Name = "Focaccia",
-                Ingredients = "Bread with italian olive oil and rosemary",
-                PhotoName = "pizzas/focaccia.jpg",
-                Price = 6,
-                SoldOut = false
-            },
-            new Pizza
-            {
-                Id = 2,
-                Name = "Pizza Margherita",
-                Ingredients = "Tomato and mozarella",
-                PhotoName = "pizzas/margherita.jpg",
-                Price = 10,
-                SoldOut = false
-            }];
+        var result = await foodRepo.GetFoodByType("pizza");
 
         _logger.LogInformation("Returning pizzasss: " + result.Count);
 
