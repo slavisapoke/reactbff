@@ -18,12 +18,12 @@ public class PizzasController : ControllerBase
     [HttpGet]
     public async Task<IEnumerable<Food>> Get([FromServices] IFoodRepository foodRepo)
     {
-        return [];
+        _logger.LogInformation("Getting pizzas");
 
-        //var result = await foodRepo.GetFoodByType("pizza");
+        var result = await foodRepo.GetFoodByType("pizza");
 
-        //_logger.LogInformation("Returning pizzasss: " + result.Count);
+        _logger.LogInformation("Returning pizzasss: " + result.Count);
 
-        //return result;
+        return result;
     }
 }
