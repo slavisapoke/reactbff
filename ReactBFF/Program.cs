@@ -5,15 +5,6 @@ using Model;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Logging.AddAzureWebAppDiagnostics();
-
-builder.Services.Configure<AzureFileLoggerOptions>(options =>
-{
-    options.FileName = "logs-";
-    options.FileSizeLimit = 50 * 1024;
-    options.RetainedFileCountLimit = 5;
-});
-
 // Add services to the container.
 builder.Services.AddCors(options =>
 {
@@ -23,13 +14,18 @@ builder.Services.AddCors(options =>
            .AllowAnyHeader());
 });
 
-builder.Services.AddLogging();
 builder.Services.AddControllers();
+
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.Configure<CosmosDBSettings>(
-    builder.Configuration.GetSection(CosmosDBSettings.SETTINGS_NAME));
+    builder.Configuration.GetSection(CosmosDBSettings.SETTINGS_NAME)); 
+
+builder.Logging.ClearProviders(); // Remove default loggers
+builder.Logging.AddConsole(); // Add console logging
+builder.Logging.AddAzureWebAppDiagnostics();
 
 builder.Services.ConfigureServices();
 
