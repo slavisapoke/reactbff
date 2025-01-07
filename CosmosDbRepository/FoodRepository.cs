@@ -22,32 +22,24 @@ public class FoodRepository : IFoodRepository
 
     public async Task<List<Food>> GetFoodByType(string type)
     {
-        try
+        List<Food> result = [];
+
+        var container = GetContainerClient();
+        var query = $"SELECT * FROM c WHERE c.type = \"{type}\" and c.soldOut  = false";
+
+        QueryDefinition queryDef = new QueryDefinition(query);
+        FeedIterator<Food> resultSetIterator = container.GetItemQueryIterator<Food>(queryDef);
+
+        while (resultSetIterator.HasMoreResults)
         {
-            List<Food> result = [];
-
-            var container = GetContainerClient();
-            var query = $"SELECT * FROM c WHERE c.type = \"{type}\" and c.soldOut  = false";
-
-            QueryDefinition queryDef = new QueryDefinition(query);
-            FeedIterator<Food> resultSetIterator = container.GetItemQueryIterator<Food>(queryDef);
-
-            while (resultSetIterator.HasMoreResults)
+            FeedResponse<Food> foodResponse = await resultSetIterator.ReadNextAsync();
+            foreach (Food food in foodResponse)
             {
-                FeedResponse<Food> foodResponse = await resultSetIterator.ReadNextAsync();
-                foreach (Food food in foodResponse)
-                {
-                    result.Add(food);
-                }
+                result.Add(food);
             }
+        }
 
-            return result;
-        }
-        catch(Exception ex)
-        {
-            _logger.LogError(ex, "Failed to retrieve food by type: " + type);
-            return [];
-        }
+        return result;
     }
 
     public async Task<Food?> Insert(Food item)
