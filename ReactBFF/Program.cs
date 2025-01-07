@@ -23,16 +23,8 @@ builder.Services.AddCors(options =>
            .AllowAnyHeader());
 });
 
-
-Log.Logger = new LoggerConfiguration()
-    .WriteTo.Console()
-    .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day)
-    .CreateLogger();
-
-builder.Services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog());
-
+builder.Services.AddLogging();
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
